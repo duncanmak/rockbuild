@@ -2,18 +2,8 @@ require 'open-uri'
 
 class Package
 
-  def initialize(
-      name,
-      version,
-      sources = []
-      )
-
-    @name = name
-    @version = version
-    @sources = sources
-  end
-
-  attr_reader :name, :version, :sources
+  # Subclasses must implement these accessors
+  # attr_reader :name, :version, :sources
 
   def build_success_file
     File.join(@root_directory, "#{self}.success")

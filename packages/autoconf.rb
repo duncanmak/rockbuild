@@ -8,6 +8,6 @@ class Autoconf < Package
   end
 
   def sources
-    [TargzSource.new("http://ftp.gnu.org/gnu/#{name}/#{name}-#{version}.tar.gz")]
+    [TarGzSource.new("http://ftp.gnu.org/gnu/#{name}/#{name}-#{version}.tar.gz")]
   end
 end

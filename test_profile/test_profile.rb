@@ -2,8 +2,8 @@ class TestProfile < Profile
 
   def packages
     [
-      XZPackage,
-      TarPackage
+      Autoconf,
+      Automake
     ]
   end
 end
