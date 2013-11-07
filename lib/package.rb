@@ -9,24 +9,26 @@ class Package
     File.join(@root_directory, "#{self}.success")
   end
 
-  def phases() [:download, :prep, :build, :install] end
+  def default_phases() [:download, :prep, :build, :install] end
 
   def is_successful_build?
     def newer_than_sources?
       mtime = File.mtime(build_success_file)
-      not @sources.select { |s| File.file?(s) && File.mtime(s) > mtime }.empty?
+      not sources.select { |s| File.file?(s) && File.mtime(s) > mtime }.empty?
     end
 
     File.exists?(build_success_file) && newer_than_sources?
   end
 
   def start(root_directory)
+    @root_directory = root_directory
+
+    phases = default_phases
+
     if is_successful_build?()
       log "Skipping #{self} - already build"
-      install
+      phases = [:install]
     end
-
-    @root_directory = root_directory
 
     phases.each do |phase| (send phase) end
   end
@@ -38,8 +40,8 @@ class Package
   def to_s() "#{name}-#{version}" end
 
   def download
-    @sources.each do |s|
-      s.download!(@root_directory)
+    sources.each do |s|
+      s.download(@root_directory)
     end
   end
 
