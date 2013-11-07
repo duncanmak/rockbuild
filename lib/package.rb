@@ -1,3 +1,4 @@
+require 'fileutils'
 require 'open-uri'
 
 class Package
@@ -9,18 +10,11 @@ class Package
     File.join(@root_directory, "#{self}.success")
   end
 
-  def default_phases() [:download, :prep, :build, :install] end
+  def default_phases() [:retrieve, :prep, :build, :install] end
 
-  def is_successful_build?
-    def newer_than_sources?
-      mtime = File.mtime(build_success_file)
-      not sources.select { |s| File.file?(s) && File.mtime(s) > mtime }.empty?
-    end
-
-    File.exists?(build_success_file) && newer_than_sources?
-  end
-
+  # This is the method that gets things going
   def start(root_directory)
+    FileUtils.mkdir_p root_directory unless File.exists?(root_directory)
     @root_directory = root_directory
 
     phases = default_phases
@@ -33,16 +27,33 @@ class Package
     phases.each do |phase| (send phase) end
   end
 
-  def working_directory
-    File.join(@root_directory, to_s)
+  def is_successful_build?
+    def newer_than_sources?
+      mtime = File.mtime(build_success_file)
+      not sources.select { |s| File.file?(s) && File.mtime(s) > mtime }.empty?
+    end
+
+    File.exists?(build_success_file) && newer_than_sources?
   end
 
-  def to_s() "#{name}-#{version}" end
+  def prefix
+    File.join(@root_directory, "_install")
+  end
 
-  def download
+  def working_directory
+    File.join(@root_directory, namever)
+  end
+
+  def namever() "#{name}-#{version}" end
+
+  def retrieve
     sources.each do |s|
-      s.download(@root_directory)
+      s.retrieve(@root_directory)
     end
+  end
+
+  def configure
+    "./configure --prefix=#{prefix}"
   end
 
   def prep
