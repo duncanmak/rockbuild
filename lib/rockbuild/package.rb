@@ -19,6 +19,18 @@ module Rockbuild
       File.join(@profile.root, 'cache')
     end
 
+    def cached_filename
+      sources.first.url.split('/').last
+    end
+
+    def is_cached?
+      File.exists?(File.join(download_cache_dir, cached_filename))
+    end
+
+    def extracted_dir_name
+      File.join(build_root, "#{name}-#{version}")
+    end
+
     def sources
       []
     end
@@ -65,8 +77,7 @@ module Rockbuild
 
     def retrieve
       sources.each do |s|
-        s.retrieve(download_cache_dir)
-        s.extract(self)
+        s.retrieve(self)
       end
     end
 
@@ -75,7 +86,9 @@ module Rockbuild
     end
 
     def prep
-      puts "Package#prep"
+      sources.each do |s|
+        s.extract(self)
+      end
     end
 
     def build

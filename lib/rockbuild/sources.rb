@@ -18,8 +18,8 @@ module Rockbuild
 
     def filename() File.basename(url) end
 
-    def retrieve(destdir)
-      download(destdir)
+    def retrieve(package)
+      download(package.download_cache_dir) unless package.is_cached?
     end
 
     def download(destdir)
@@ -35,13 +35,18 @@ module Rockbuild
       end
     end
 
-    def extract(package, overwrite: true)
+    def extract(package, overwrite: false)
       profile = package.profile
 
       Dir.chdir(profile.build_root) do
-        puts "extracting #{namever} in #{Dir.pwd}"
         cached_filename = "#{package.download_cache_dir}/#{filename}"
-        extract!(cached_filename)
+
+        if overwrite || !File.exists?(package.extracted_dir_name)
+          puts "Extracting #{namever} in #{Dir.pwd}"
+          extract!(cached_filename)
+        else
+          puts "Nothing to extract for #{namever}."
+        end
       end
     end
 
