@@ -1,3 +1,7 @@
+#!/usr/bin/env ruby
+
+require 'rockbuild'
+
 cwd = File.expand_path('../', __FILE__)
 
 # Require rockbuild
@@ -8,6 +12,6 @@ Dir["#{cwd}/packages/**/*.rb"].each do |pkg| puts pkg; require pkg end
 
 $stdout.sync = true
 
-load 'profiles/test_profile.rb'
+require "#{cwd}/../profiles/test_profile"
 
 TestProfile.new.start
