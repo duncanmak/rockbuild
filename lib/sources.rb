@@ -2,6 +2,8 @@ require 'fileutils'
 require 'open-uri'
 
 class Source
+  include Helpers
+
   def initialize(url)
     @url = url
   end
@@ -47,8 +49,6 @@ class Source
 end
 
 class TarGzSource < Source
-  include Helpers
-
   private
 
   def extract!
@@ -57,8 +57,6 @@ class TarGzSource < Source
 end
 
 class TarBz2Source < Source
-  include Helpers
-
   private
 
   def extract!
@@ -67,8 +65,6 @@ class TarBz2Source < Source
 end
 
 class TarXzSource < Source
-  include Helpers
-
   private
 
   def extract!
