@@ -30,6 +30,7 @@ class Source
       end
     rescue Exception => e
       puts e.message
+      File.delete(destfile)
     end
   end
 
