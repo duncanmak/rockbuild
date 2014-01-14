@@ -5,16 +5,17 @@ module Rockbuild
   class Profile
     def initialize()
       @build_root = File.join(Dir.pwd, 'build-root')
-
     end
 
     attr_reader :build_root
 
-    def packages() raise "Subclass responsibility" end
+    def packages
+      []
+    end
 
     def start()
       packages.each do |pkg|
-        pkg = pkg.new if pkg.is_a? Class
+        pkg = pkg.new
 
         pkg.start(@build_root)
       end
