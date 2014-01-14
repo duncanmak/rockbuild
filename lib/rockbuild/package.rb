@@ -4,7 +4,11 @@ require 'open-uri'
 module Rockbuild
   class Package
     # Subclasses must implement these accessors
-    # attr_reader :name, :version, :sources
+    # attr_reader :name, :version
+
+    def sources
+      []
+    end
 
     def build_success_file
       File.join(@root_directory, "#{self}.success")
