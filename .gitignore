@@ -20,3 +20,4 @@ doc/
 
 # Rockbuild specify
 build-root/
+cache/
