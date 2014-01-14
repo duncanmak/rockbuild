@@ -5,21 +5,34 @@ module Rockbuild
   class Package
     # Subclasses must implement these accessors
     # attr_reader :name, :version
+    attr_reader :profile
+
+    def initialize(profile)
+      @profile = profile
+    end
+
+    def build_root
+      @profile.build_root
+    end
+
+    def download_cache_dir
+      File.join(@profile.root, 'cache')
+    end
 
     def sources
       []
     end
 
     def build_success_file
-      File.join(@root_directory, "#{self}.success")
+      File.join(build_root, "#{self}.success")
     end
 
     def default_phases() [:retrieve, :prep, :build, :install] end
 
     # This is the method that gets things going
-    def start(root_directory)
-      FileUtils.mkdir_p root_directory unless File.exists?(root_directory)
-      @root_directory = root_directory
+    def start
+      FileUtils.mkdir_p(build_root) unless File.exists?(build_root)
+      FileUtils.mkdir_p(download_cache_dir) unless File.exists?(download_cache_dir)
 
       phases = default_phases
 
@@ -41,18 +54,19 @@ module Rockbuild
     end
 
     def prefix
-      File.join(@root_directory, "_install")
+      File.join(build_root, "_install")
     end
 
     def working_directory
-      File.join(@root_directory, namever)
+      File.join(build_root, namever)
     end
 
     def namever() "#{name}-#{version}" end
 
     def retrieve
       sources.each do |s|
-        s.retrieve(@root_directory)
+        s.retrieve(download_cache_dir)
+        s.extract(self)
       end
     end
 

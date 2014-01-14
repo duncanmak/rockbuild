@@ -20,7 +20,6 @@ module Rockbuild
 
     def retrieve(destdir)
       download(destdir)
-      extract(destdir)
     end
 
     def download(destdir)
@@ -36,16 +35,19 @@ module Rockbuild
       end
     end
 
-    def extract(directory, overwrite: true)
-      Dir.chdir(directory) do
+    def extract(package, overwrite: true)
+      profile = package.profile
+
+      Dir.chdir(profile.build_root) do
         puts "extracting #{namever} in #{Dir.pwd}"
-        extract!
+        cached_filename = "#{package.download_cache_dir}/#{filename}"
+        extract!(cached_filename)
       end
     end
 
     private
 
-    def extract!
+    def extract!(cached_filename)
       puts "extract!"
       raise "subclass responsibility"
     end
@@ -54,24 +56,24 @@ module Rockbuild
   class TarGzSource < Source
     private
 
-    def extract!
-      puts tar 'xf', filename
+    def extract!(cached_filename)
+      puts tar 'xf', cached_filename
     end
   end
 
   class TarBz2Source < Source
     private
 
-    def extract!
-      puts tar 'xf', filename
+    def extract!(cached_filename)
+      puts tar 'xf', cached_filename
     end
   end
 
   class TarXzSource < Source
     private
 
-    def extract!
-      puts tar 'xf', filename
+    def extract!(cached_filename)
+      puts tar 'xf', cached_filename
     end
   end
 end

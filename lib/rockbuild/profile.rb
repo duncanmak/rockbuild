@@ -4,20 +4,22 @@ Dir["#{cwd}/../../packages/**/*.rb"].each do |pkg| puts pkg; require pkg end
 module Rockbuild
   class Profile
     def initialize()
-      @build_root = File.join(Dir.pwd, 'build-root')
+      @root = Dir.pwd
+      @build_root = File.join(@root, 'build-root')
     end
 
+    attr_reader :root
     attr_reader :build_root
 
     def packages
       []
     end
 
-    def start()
+    def start
       packages.each do |pkg|
-        pkg = pkg.new
+        pkg = pkg.new(self)
 
-        pkg.start(@build_root)
+        pkg.start
       end
     end
   end
