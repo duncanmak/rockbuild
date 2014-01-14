@@ -34,33 +34,44 @@ class Source
   def extract(directory, overwrite: true)
     Dir.chdir(directory) do
       puts "extracting #{namever} in #{Dir.pwd}"
-      really_extract
+      extract!
     end
   end
 
-  def really_extract
-    puts "really_extract"
+  private
+
+  def extract!
+    puts "extract!"
     raise "subclass responsibility"
   end
 end
 
 class TarGzSource < Source
   include Helpers
-  def really_extract
+
+  private
+
+  def extract!
     puts tar 'xf', filename
   end
 end
 
 class TarBz2Source < Source
   include Helpers
-  def really_extract
+
+  private
+
+  def extract!
     puts tar 'xf', filename
   end
 end
 
 class TarXzSource < Source
   include Helpers
-  def really_extract
+
+  private
+
+  def extract!
     puts tar 'xf', filename
   end
 end
