@@ -24,7 +24,7 @@ class Package
       phases = [:install]
     end
 
-    phases.each do |phase| (send phase) end
+    phases.each { |phase| (send phase) }
   end
 
   def is_successful_build?
