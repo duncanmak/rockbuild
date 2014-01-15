@@ -64,8 +64,8 @@ module Rockbuild
         end
 
         Dir.chdir(@package.extracted_dir_name) do
-          puts @package.configure
-          `#{@package.configure}`
+          puts @package.configure_command
+          `#{@package.configure_command}`
         end
       end
     end

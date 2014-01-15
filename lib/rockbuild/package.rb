@@ -66,7 +66,7 @@ module Rockbuild
       File.exists?(build_success_file) && newer_than_sources?
     end
 
-    def prefix
+    def install_prefix
       File.join(build_root, "_install")
     end
 
@@ -82,8 +82,8 @@ module Rockbuild
       end
     end
 
-    def configure
-      "./configure --prefix=#{prefix}"
+    def configure_command
+      "./configure --prefix=#{install_prefix}"
     end
 
     def prep
