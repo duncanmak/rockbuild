@@ -3,9 +3,22 @@ require 'open-uri'
 
 module Rockbuild
   class Package
-    # Subclasses must implement these accessors
-    # attr_reader :name, :version
     attr_reader :profile
+
+    # This should be overridden by subclasses.
+    def sources
+      []
+    end
+
+    # This should be overridden by subclasses.
+    def name
+      raise 'Should be overridden by subclass.'
+    end
+
+    # Thisshould be overridden by subclasses.
+    def version
+      raise 'Should be overridden by subclass.'
+    end
 
     def initialize(profile)
       @profile = profile
@@ -29,11 +42,6 @@ module Rockbuild
 
     def extracted_dir_name
       File.join(build_root, namever)
-    end
-
-    # This should be overridden by subclasses.
-    def sources
-      []
     end
 
     def build_success_file
@@ -74,7 +82,9 @@ module Rockbuild
       File.join(build_root, namever)
     end
 
-    def namever() "#{name}-#{version}" end
+    def namever
+      "#{name}-#{version}"
+    end
 
     def retrieve
       sources.each do |s|
