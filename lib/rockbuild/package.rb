@@ -28,7 +28,7 @@ module Rockbuild
     end
 
     def extracted_dir_name
-      File.join(build_root, "#{name}-#{version}")
+      File.join(build_root, namever)
     end
 
     # This should be overridden by subclasses.
