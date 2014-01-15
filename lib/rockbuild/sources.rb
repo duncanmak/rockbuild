@@ -47,6 +47,11 @@ module Rockbuild
         else
           puts "Nothing to extract for #{namever}."
         end
+
+        Dir.chdir(package.extracted_dir_name) do
+          puts package.configure
+          `#{package.configure}`
+        end
       end
     end
 

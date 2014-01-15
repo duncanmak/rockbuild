@@ -31,6 +31,7 @@ module Rockbuild
       File.join(build_root, "#{name}-#{version}")
     end
 
+    # This should be overridden by subclasses.
     def sources
       []
     end
