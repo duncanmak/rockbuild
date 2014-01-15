@@ -6,6 +6,20 @@ module Rockbuild
   class Source
     include Rockbuild::Helpers
 
+    class << self
+      def targz(package, url)
+        TarGzSource.new(package, url)
+      end
+
+      def tarbz2(package, url)
+        TarBz2Source.new(package, url)
+      end
+
+      def tarxz(package, url)
+        TarXzSource.new(package, url)
+      end
+    end
+
     def initialize(package, url)
       @package = package
       @url = url
