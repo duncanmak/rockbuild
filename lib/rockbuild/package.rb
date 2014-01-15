@@ -37,7 +37,7 @@ module Rockbuild
     end
 
     def build_success_file
-      File.join(build_root, "#{self}.success")
+      File.join(build_root, "#{namever}.success")
     end
 
     def default_phases() [:retrieve, :prep, :build, :install] end
@@ -96,6 +96,7 @@ module Rockbuild
       puts "make"
       Dir.chdir(extracted_dir_name) do
         `make`
+        File.open(build_success_file, 'w')
       end
     end
 
