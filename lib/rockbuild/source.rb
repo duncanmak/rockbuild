@@ -7,16 +7,12 @@ module Rockbuild
     include Rockbuild::Helpers
 
     class << self
-      def targz(package, url)
-        TarGzSource.new(package, url)
+      def tar(package, url)
+        TarSource.new(package, url)
       end
 
-      def tarbz2(package, url)
-        TarBz2Source.new(package, url)
-      end
-
-      def tarxz(package, url)
-        TarXzSource.new(package, url)
+      def git(package, url)
+        GitSource.new(package, url)
       end
     end
 
@@ -63,6 +59,7 @@ module Rockbuild
           puts "Nothing to extract for #{namever}."
         end
 
+        puts "Changing into #{@package.extracted_dir_name}..."
         Dir.chdir(@package.extracted_dir_name) do
           puts @package.configure_command
           `#{@package.configure_command}`
@@ -75,30 +72,6 @@ module Rockbuild
     def extract!(cached_filename)
       puts "extract!"
       raise "subclass responsibility"
-    end
-  end
-
-  class TarGzSource < Source
-    private
-
-    def extract!(cached_filename)
-      puts tar 'xf', cached_filename
-    end
-  end
-
-  class TarBz2Source < Source
-    private
-
-    def extract!(cached_filename)
-      puts tar 'xf', cached_filename
-    end
-  end
-
-  class TarXzSource < Source
-    private
-
-    def extract!(cached_filename)
-      puts tar 'xf', cached_filename
     end
   end
 end

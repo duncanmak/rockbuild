@@ -1,5 +1,5 @@
 require 'rockbuild/package'
-require 'rockbuild/sources'
+require 'rockbuild/source'
 
 include Rockbuild
 
@@ -13,6 +13,6 @@ class Autoconf < Package
   end
 
   def sources
-    [Source.targz(self, "http://ftp.gnu.org/gnu/#{name}/#{name}-#{version}.tar.gz")]
+    [Source.tar(self, "http://ftp.gnu.org/gnu/#{name}/#{name}-#{version}.tar.gz")]
   end
 end
