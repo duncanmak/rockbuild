@@ -1,5 +1,6 @@
-class TestProfile < Profile
+require 'rockbuild/profile'
 
+class TestProfile < Profile
   def packages
     [
       Autoconf,

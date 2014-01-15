@@ -1,0 +1,19 @@
+PATH
+  remote: .
+  specs:
+    rockbuild (0.0.1)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    minitest (5.2.1)
+    rake (10.1.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler (~> 1.5)
+  minitest
+  rake
+  rockbuild!

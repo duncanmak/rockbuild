@@ -1,3 +1,8 @@
+require 'rockbuild/package'
+require 'rockbuild/sources'
+
+include Rockbuild
+
 class Automake < Package
   def name
     'automake'
