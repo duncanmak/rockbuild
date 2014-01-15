@@ -78,7 +78,7 @@ module Rockbuild
 
     def retrieve
       sources.each do |s|
-        s.retrieve(self)
+        s.retrieve
       end
     end
 
@@ -88,7 +88,7 @@ module Rockbuild
 
     def prep
       sources.each do |s|
-        s.extract(self)
+        s.extract
       end
     end
 

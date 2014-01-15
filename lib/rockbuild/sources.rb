@@ -6,7 +6,8 @@ module Rockbuild
   class Source
     include Rockbuild::Helpers
 
-    def initialize(url)
+    def initialize(package, url)
+      @package = package
       @url = url
     end
 
@@ -18,8 +19,8 @@ module Rockbuild
 
     def filename() File.basename(url) end
 
-    def retrieve(package)
-      download(package.download_cache_dir) unless package.is_cached?
+    def retrieve
+      download(@package.download_cache_dir) unless @package.is_cached?
     end
 
     def download(destdir)
@@ -35,22 +36,22 @@ module Rockbuild
       end
     end
 
-    def extract(package, overwrite: false)
-      profile = package.profile
+    def extract(overwrite: false)
+      profile = @package.profile
 
       Dir.chdir(profile.build_root) do
-        cached_filename = "#{package.download_cache_dir}/#{filename}"
+        cached_filename = "#{@package.download_cache_dir}/#{filename}"
 
-        if overwrite || !File.exists?(package.extracted_dir_name)
+        if overwrite || !File.exists?(@package.extracted_dir_name)
           puts "Extracting #{namever} in #{Dir.pwd}"
           extract!(cached_filename)
         else
           puts "Nothing to extract for #{namever}."
         end
 
-        Dir.chdir(package.extracted_dir_name) do
-          puts package.configure
-          `#{package.configure}`
+        Dir.chdir(@package.extracted_dir_name) do
+          puts @package.configure
+          `#{@package.configure}`
         end
       end
     end
