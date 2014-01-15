@@ -93,11 +93,17 @@ module Rockbuild
     end
 
     def build
-      puts "Package#build"
+      puts "make"
+      Dir.chdir(extracted_dir_name) do
+        `make`
+      end
     end
 
     def install
-      puts "Package#install"
+      puts "make install"
+      Dir.chdir(extracted_dir_name) do
+        `make install`
+      end
     end
   end
 end
