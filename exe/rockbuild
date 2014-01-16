@@ -14,4 +14,4 @@ $stdout.sync = true
 
 require "#{cwd}/../profiles/test_profile"
 
-TestProfile.new.start
+DemoProfile.new.start
