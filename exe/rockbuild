@@ -12,6 +12,6 @@ Dir["#{cwd}/packages/**/*.rb"].each do |pkg| puts pkg; require pkg end
 
 $stdout.sync = true
 
-require "#{cwd}/../profiles/test_profile"
+require "#{cwd}/../profiles/demo_profile"
 
 DemoProfile.new.start
