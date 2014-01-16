@@ -8,11 +8,6 @@ class TarSource < Source
   private
 
   def extract!(cached_filename)
-#    puts tar 'xf', cached_filename
-    puts "***** About to extract #{cached_filename}"
-
-    require 'debugger'
-
     Gem::Package::TarReader.new(Zlib::GzipReader.open(cached_filename)) do |tar|
       destination = @package.profile.build_root
       dest = nil
@@ -27,7 +22,7 @@ class TarSource < Source
         if entry.directory?
           FileUtils.rm_rf(dest) unless File.directory?(dest)
           FileUtils.mkdir_p(dest, mode: entry.header.mode, verbose: false)
-        elsif entry.header.typeflag == '0' || entry.header.typeflag == ''
+        elsif entry.file? || entry.header.typeflag == ''
           FileUtils.rm_rf(dest) unless File.file?(dest)
           File.open(dest, "wb") do |f|
             f.print(entry.read)
