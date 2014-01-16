@@ -11,6 +11,10 @@ module Rockbuild
     attr_reader :root
     attr_reader :build_root
 
+    def install_prefix
+      File.join(build_root, "_install")
+    end
+
     def packages
       []
     end

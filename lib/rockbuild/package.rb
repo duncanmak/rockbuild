@@ -32,6 +32,10 @@ module Rockbuild
       @profile.build_root
     end
 
+    def install_prefix
+      @profile.install_prefix
+    end
+
     def download_cache_dir
       File.join(@profile.root, 'cache')
     end
@@ -62,7 +66,7 @@ module Rockbuild
       phases = default_phases
 
       if is_successful_build?()
-        log "Skipping #{self} - already build"
+        puts "Skipping #{name} - already build"
         phases = [:install]
       end
 
@@ -72,14 +76,10 @@ module Rockbuild
     def is_successful_build?
       def newer_than_sources?
         mtime = File.mtime(build_success_file)
-        not (File.file?(source) && File.mtime(source) > mtime)
+        not (File.file?(source.filename) && File.mtime(source.filename) > mtime)
       end
 
       File.exists?(build_success_file) && newer_than_sources?
-    end
-
-    def install_prefix
-      File.join(build_root, "_install")
     end
 
     def working_directory
