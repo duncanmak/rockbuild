@@ -6,7 +6,11 @@ module Rockbuild
     attr_reader :profile
 
     # This should be overridden by subclasses.
-    def sources
+    def source
+      raise 'Should be overridden by subclass.'
+    end
+
+    def patches
       []
     end
 
@@ -33,7 +37,7 @@ module Rockbuild
     end
 
     def cached_filename
-      sources.first.url.split('/').last
+      source.url.split('/').last
     end
 
     def is_cached?
@@ -68,7 +72,7 @@ module Rockbuild
     def is_successful_build?
       def newer_than_sources?
         mtime = File.mtime(build_success_file)
-        not sources.select { |s| File.file?(s) && File.mtime(s) > mtime }.empty?
+        not (File.file?(source) && File.mtime(source) > mtime)
       end
 
       File.exists?(build_success_file) && newer_than_sources?
@@ -87,8 +91,8 @@ module Rockbuild
     end
 
     def retrieve
-      sources.each do |s|
-        s.retrieve
+      unless is_cached?
+        source.retrieve(download_cache_dir)
       end
     end
 
@@ -97,8 +101,9 @@ module Rockbuild
     end
 
     def prep
-      sources.each do |s|
-        s.extract
+      Dir.chdir(profile.build_root) do
+        extract_from = "#{download_cache_dir}/#{source.filename}"
+        source.extract(extract_from)
       end
     end
 
