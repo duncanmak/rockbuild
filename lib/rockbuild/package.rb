@@ -29,8 +29,13 @@ module Rockbuild
       raise 'Should be overridden by subclass.'
     end
 
-    def fetch
-      puts "Fetching #{name}..."
+    def fetch(download_dir)
+      if is_cached?(download_dir)
+        puts "#{name} is already downloaded, no need to download."
+      else
+        puts "Fetching #{name}..."
+        source.retrieve(download_dir)
+      end
     end
 
     # def build_root
@@ -49,8 +54,8 @@ module Rockbuild
       source.url.split('/').last
     end
 
-    def is_cached?
-      File.exists?(File.join(download_cache_dir, cached_filename))
+    def is_cached?(download_dir)
+      File.exists?(File.join(download_dir, cached_filename))
     end
 
     def extracted_dir_name

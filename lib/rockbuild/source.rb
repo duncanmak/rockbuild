@@ -21,7 +21,7 @@ module Rockbuild
       @url = url
     end
 
-    attr_reader :url
+    attr_reader :package, :url
 
     def namever
       File.basename(url).sub(/\.\w$/, '')
@@ -37,8 +37,11 @@ module Rockbuild
       puts "Downloading #{url} to #{destdir}"
       begin
         destfile = File.join(destdir, filename)
+
+        FileUtils.mkdir_p(destdir) unless File.exists?(destdir)
+
         File.open(destfile, "wb") do |output|
-          open(url) {|input| output.write(input.read)}
+          open(url) { |input| output.write(input.read) }
         end
       rescue Exception => e
         puts e.message

@@ -9,6 +9,6 @@ class Autoconf < Package
   end
 
   def self.sources
-    { '2.69' => Source.tar(self, 'http://ftp.gnu.org/gnu/#{name}/#{name}-#{version}.tar.gz') }
+    { '2.69' => Source.tar(self, 'http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz') }
   end
 end
