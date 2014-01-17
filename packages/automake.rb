@@ -8,11 +8,7 @@ class Automake < Package
     'automake'
   end
 
-  def version
-    '1.13'
-  end
-
-  def source
-    Source.tar(self, "http://ftp.gnu.org/gnu/#{name}/#{name}-#{version}.tar.gz")
+  def self.sources
+    { '1.13' => Source.tar(self, 'http://ftp.gnu.org/gnu/#{name}/#{name}-#{version}.tar.gz') }
   end
 end

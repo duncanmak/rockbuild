@@ -4,10 +4,20 @@ require 'open-uri'
 module Rockbuild
   class Package
     attr_reader :profile
+    attr_reader :version
+    attr_reader :source
 
-    # This should be overridden by subclasses.
-    def source
-      raise 'Should be overridden by subclass.'
+    def initialize(ver, src)
+      @version = ver
+      @source = src
+    end
+
+    def self.sources
+      raise 'Subclass must override and return { version => Source } hash.'
+    end
+
+    def self.version(ver)
+      self.new(ver, self.sources[ver])
     end
 
     def patches
@@ -19,26 +29,21 @@ module Rockbuild
       raise 'Should be overridden by subclass.'
     end
 
-    # Thisshould be overridden by subclasses.
-    def version
-      raise 'Should be overridden by subclass.'
+    def fetch
+      puts "Fetching #{name}..."
     end
 
-    def initialize(profile)
-      @profile = profile
-    end
+    # def build_root
+    #   @profile.build_root
+    # end
 
-    def build_root
-      @profile.build_root
-    end
+    # def install_prefix
+    #   @profile.install_prefix
+    # end
 
-    def install_prefix
-      @profile.install_prefix
-    end
-
-    def download_cache_dir
-      File.join(@profile.root, 'cache')
-    end
+    # def download_cache_dir
+    #   File.join(@profile.root, 'cache')
+    # end
 
     def cached_filename
       source.url.split('/').last
@@ -109,6 +114,11 @@ module Rockbuild
 
     def build
       puts "make"
+      ENV['CFLAGS'] = merge_flags(profile.cflags)
+      ENV['CPPFLAGS'] = merge_flags(profile.cflags)
+      ENV['CXXFLAGS'] = merge_flags(profile.cflags)
+      ENV['LDFLAGS'] = merge_flags(profile.ldflags)
+
       Dir.chdir(extracted_dir_name) do
         `make`
         File.open(build_success_file, 'w')
@@ -120,6 +130,16 @@ module Rockbuild
       Dir.chdir(extracted_dir_name) do
         `make install`
       end
+    end
+
+    private
+
+    def merge_flags(flags_array)
+      flags_array.join(' ')
+    end
+
+    def lazy_merge_flags(flags_array)
+      flags_array.map { |s| eval(%Q["#{s}"]) }.join(' ')
     end
   end
 end

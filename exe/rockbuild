@@ -5,13 +5,16 @@ require 'rockbuild'
 cwd = File.expand_path('../', __FILE__)
 
 # Require rockbuild
-Dir["#{cwd}/lib/**/*.rb"].each do |pkg| puts pkg; require pkg end
+Dir["#{cwd}/../lib/**/*.rb"].each { |pkg| require pkg }
 
 # Require all the packages
-Dir["#{cwd}/packages/**/*.rb"].each do |pkg| puts pkg; require pkg end
+Dir["#{cwd}/../packages/**/*.rb"].each { |pkg| require pkg }
+
+# Require all the projects
+Dir["#{cwd}/../projects/**/*.rb"].each { |project| require project }
 
 $stdout.sync = true
 
-require "#{cwd}/../profiles/demo_profile"
+require "#{cwd}/../projects/demo_project"
 
-DemoProfile.new.start
+DemoProject.new.start
