@@ -29,7 +29,11 @@ module Rockbuild
     end
 
     def prep
-      raise 'Must implement.'
+      puts "Project#prep"
+
+      components.each do |package, profile, strategy|
+        strategy.prep(package, profile)
+      end
     end
 
     def fetch

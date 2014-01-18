@@ -13,10 +13,16 @@ module Rockbuild
     #   @configure.call(package, profile) unless @configure.nil?
     # end
 
+    def prep(package, profile)
+      raise "Strategy must implement 'prep'."
+    end
+
     def build(package, profile)
+      raise "Strategy must implement 'build'."
     end
 
     def install(package, profile)
+      raise "Strategy must implement 'install'."
     end
   end
 end

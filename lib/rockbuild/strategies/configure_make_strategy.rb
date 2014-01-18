@@ -6,6 +6,10 @@ module Rockbuild
       puts "ConfigureMakeStrategy#configure for #{package.name}"
     end
 
+    def prep(package, profile)
+      puts "ConfigureMakeStrategy#prep for #{package.name}"
+    end
+
     def build(package, profile)
       puts "ConfigureMakeStrategy#build for #{package.name}"
     end

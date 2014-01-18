@@ -10,10 +10,6 @@ class DemoProject < Project
     ]
   end
 
-  def prep
-    puts "DemoProject#prep"
-  end
-
   def bundle
     puts "DemoProject#bundle"
   end
