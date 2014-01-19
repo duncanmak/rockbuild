@@ -1,21 +1,7 @@
 module Rockbuild
   class Project
-    def initialize
-      @root = Dir.pwd
-      @build_root = File.join(@root, 'build-root')
-      @download_dir = File.join(@root, 'cache')
-    end
-
     def entry(package, profile, strategy)
       [ package, profile, strategy.new ]
-    end
-
-    attr_reader :root
-    attr_reader :build_root
-    attr_reader :download_dir
-
-    def install_prefix
-      File.join(build_root, "_install")
     end
 
     # This should be overridden
@@ -40,7 +26,7 @@ module Rockbuild
       puts "Project#fetch"
 
       components.each do |package, profile, strategy|
-        package.fetch(download_dir)
+        package.fetch
       end
     end
 

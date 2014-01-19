@@ -29,48 +29,52 @@ module Rockbuild
       raise 'Should be overridden by subclass.'
     end
 
-    def fetch(download_dir)
-      if is_cached?(download_dir)
+    def fetch
+      if is_cached?
         puts "#{name} is already downloaded, no need to download."
       else
         puts "Fetching #{name}..."
-        source.retrieve(download_dir)
+        source.retrieve(Env.download_dir)
+      end
+
+      if is_extracted?
+        puts "#{name} is already extracted."
+      else
+        puts "Extracting #{name} to #{Env.build_root}..."
+
+        FileUtils.mkdir_p(Env.build_root) unless File.exists?(Env.build_root)
+
+        Dir.chdir(Env.build_root) do
+          extract_from = "#{Env.download_dir}/#{source.filename}"
+          source.extract(self, extract_from, extracted_dir)
+        end
       end
     end
 
-    # def build_root
-    #   @profile.build_root
-    # end
+    def is_extracted?
+      File.exists?(extracted_dir)
+    end
 
-    # def install_prefix
-    #   @profile.install_prefix
-    # end
-
-    # def download_cache_dir
-    #   File.join(@profile.root, 'cache')
-    # end
+    def extracted_dir
+      File.join(Env.build_root, namever)
+    end
 
     def cached_filename
       source.url.split('/').last
     end
 
-    def is_cached?(download_dir)
-      File.exists?(File.join(download_dir, cached_filename))
-    end
-
-    def extracted_dir_name
-      File.join(build_root, namever)
+    def is_cached?
+      File.exists?(File.join(Env.download_dir, cached_filename))
     end
 
     def build_success_file
       File.join(build_root, "#{namever}.success")
     end
 
-    def default_phases() [:retrieve, :prep, :build, :install] end
 
     # This is the method that gets things going
     def start
-      FileUtils.mkdir_p(build_root) unless File.exists?(build_root)
+      FileUtils.mkdir_p(Env.build_root) unless File.exists?(build_root)
       FileUtils.mkdir_p(download_cache_dir) unless File.exists?(download_cache_dir)
 
       phases = default_phases
@@ -92,10 +96,6 @@ module Rockbuild
       File.exists?(build_success_file) && newer_than_sources?
     end
 
-    def working_directory
-      File.join(build_root, namever)
-    end
-
     def namever
       "#{name}-#{version}"
     end
@@ -108,13 +108,6 @@ module Rockbuild
 
     def configure_command
       "./configure --prefix=#{install_prefix}"
-    end
-
-    def prep
-      Dir.chdir(profile.build_root) do
-        extract_from = "#{download_cache_dir}/#{source.filename}"
-        source.extract(extract_from)
-      end
     end
 
     def build

@@ -15,16 +15,15 @@ module Rockbuild
 
     def extract!(cached_filename)
       Gem::Package::TarReader.new(Zlib::GzipReader.open(cached_filename)) do |tar|
-        destination = @package.profile.build_root
         dest = nil
 
         tar.each do |entry|
           if entry.full_name == TAR_LONGLINK
-            dest = File.join(destination, entry.read.strip)
+            dest = File.join(Env.build_root, entry.read.strip)
             next
           end
 
-          dest ||= File.join(destination, entry.full_name)
+          dest ||= File.join(Env.build_root, entry.full_name)
           if entry.directory?
             FileUtils.rm_rf(dest) unless File.directory?(dest)
             FileUtils.mkdir_p(dest, mode: entry.header.mode, verbose: false)

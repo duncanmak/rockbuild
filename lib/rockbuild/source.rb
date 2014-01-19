@@ -49,18 +49,12 @@ module Rockbuild
       end
     end
 
-    def extract(cached_filename, overwrite: false)
-      if overwrite || !File.exists?(@package.extracted_dir_name)
+    def extract(package, cached_filename, extracted_dir, overwrite: false)
+      if overwrite || !File.exists?(extracted_dir)
         puts "Extracting #{namever} in #{Dir.pwd}"
         extract!(cached_filename)
       else
         puts "Nothing to extract for #{namever}."
-      end
-
-      puts "Changing into #{@package.extracted_dir_name}..."
-      Dir.chdir(@package.extracted_dir_name) do
-        puts @package.configure_command
-        `#{@package.configure_command}`
       end
     end
 
