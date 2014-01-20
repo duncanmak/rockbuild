@@ -1,11 +1,8 @@
 require 'fileutils'
 require 'open-uri'
-require 'rockbuild/helpers'
 
 module Rockbuild
   class Source
-    include Rockbuild::Helpers
-
     class << self
       def tar(package, url)
         TarSource.new(package, url)
