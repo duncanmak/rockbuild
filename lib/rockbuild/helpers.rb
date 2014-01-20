@@ -12,7 +12,7 @@ module Rockbuild
           "C:\\msys\\1.0\\bin\\#{exe_name}.exe"
         ].find { |filename| File.exists?(filename) }
 
-        raise "You must install git."
+        raise "You must install git." if exe_path.nil?
 
         exe_path
       else
