@@ -1,5 +1,6 @@
 require 'zlib'
 require 'rockbuild'
+require 'rockbuild/helpers'
 
 TAR_LONGLINK = '././@LongLink'
 TYPEFLAG_SYMLINK = '2'
