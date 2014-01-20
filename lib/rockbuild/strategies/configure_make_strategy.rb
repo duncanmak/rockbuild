@@ -7,6 +7,7 @@ module Rockbuild
 
       puts "Changing into #{package.extracted_dir}..."
       Dir.chdir(package.extracted_dir) do
+        puts "./configure --prefix=#{Env.prefix}"
         `./configure --prefix=#{Env.prefix}`
       end
     end
@@ -17,10 +18,20 @@ module Rockbuild
 
     def build(package, profile)
       puts "ConfigureMakeStrategy#build for #{package.name}"
+      puts "Changing into #{package.extracted_dir}..."
+      Dir.chdir(package.extracted_dir) do
+        puts "make"
+        `make`
+      end
     end
 
     def install(package, profile)
       puts "ConfigureMakeStrategy#install for #{package.name}"
+      puts "Changing into #{package.extracted_dir}..."
+      Dir.chdir(package.extracted_dir) do
+        puts "make install"
+        `make install`
+      end
     end
   end
 end
