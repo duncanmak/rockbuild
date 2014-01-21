@@ -4,21 +4,20 @@ require 'open-uri'
 module Rockbuild
   class Source
     class << self
-      def tar(package, url)
-        TarSource.new(package, url)
+      def tar(url)
+        TarSource.new(url)
       end
 
-      def git(package, url)
-        GitSource.new(package, url)
+      def git(url)
+        GitSource.new(url)
       end
     end
 
-    def initialize(package, url)
-      @package = package
+    def initialize(url)
       @url = url
     end
 
-    attr_reader :package, :url
+    attr_reader :url
 
     def namever
       File.basename(url).sub(/\.\w$/, '')
