@@ -15,11 +15,7 @@ module Rockbuild
     end
 
     def tar(*args)
-      `#{tar_bin} #{args * ' '}`
-    end
-
-    def tar_bin
-      common_bin_path('tar')
+      `tar #{args * ' '}`
     end
 
     def extract!(cached_filename)
