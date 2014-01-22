@@ -16,11 +16,19 @@ module Rockbuild
       raise 'Subclass must override and return { version => Source } hash.'
     end
 
+    def deps
+      []
+    end
+
     def self.version(ver)
       self.new(ver, self.sources[ver])
     end
 
     def patches
+      []
+    end
+
+    def configure_flags
       []
     end
 
@@ -30,6 +38,10 @@ module Rockbuild
     end
 
     def fetch
+      deps.each do |dep|
+        dep.fetch
+      end
+
       if is_cached?
         puts "#{name} is already downloaded, no need to download."
       else
@@ -103,23 +115,6 @@ module Rockbuild
     def retrieve
       unless is_cached?
         source.retrieve(download_cache_dir)
-      end
-    end
-
-    def configure_command
-      "./configure --prefix=#{install_prefix}"
-    end
-
-    def build
-      puts "make"
-      ENV['CFLAGS'] = merge_flags(profile.cflags)
-      ENV['CPPFLAGS'] = merge_flags(profile.cflags)
-      ENV['CXXFLAGS'] = merge_flags(profile.cflags)
-      ENV['LDFLAGS'] = merge_flags(profile.ldflags)
-
-      Dir.chdir(extracted_dir_name) do
-        `make`
-        File.open(build_success_file, 'w')
       end
     end
 

@@ -34,9 +34,7 @@ module Rockbuild
       puts "Project#build"
 
       components.each do |package, profile, strategy|
-        strategy.configure(package, profile)
-        strategy.build(package, profile)
-        strategy.install(package, profile)
+        strategy.build_all(package, profile)
       end
     end
 

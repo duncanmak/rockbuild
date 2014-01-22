@@ -13,6 +13,14 @@ module Rockbuild
     #   @configure.call(package, profile) unless @configure.nil?
     # end
 
+    def build_all(package, profile)
+      ensure_dependencies(package, profile)
+
+      configure(package, profile)
+      build(package, profile)
+      install(package, profile)
+    end
+
     def prep(package, profile)
       raise "Strategy must implement 'prep'."
     end
@@ -23,6 +31,29 @@ module Rockbuild
 
     def install(package, profile)
       raise "Strategy must implement 'install'."
+    end
+
+    private
+
+    def default_env(profile)
+      {
+        'PATH'            => merge_flags(profile[:path], ':'),
+        'CFLAGS'          => merge_flags(profile[:cflags]),
+        'CPPFLAGS'        => merge_flags(profile[:cflags]),
+        'CXXFLAGS'        => merge_flags(profile[:cflags]),
+        'LDFLAGS'         => merge_flags(profile[:ldflags]),
+        'PKG_CONFIG_PATH' => "#{Env.prefix}/lib/pkgconfig"
+      }
+    end
+
+    def merge_flags(flags_array, separator = ' ')
+      flags_array.join(separator)
+    end
+
+    def ensure_dependencies(package, profile)
+      package.deps.each do |dep|
+        build_all(dep, profile)
+      end
     end
   end
 end
