@@ -18,7 +18,9 @@ class Gtk < Package
   def configure_flags
     case Env.host
     when :mac
-      '--with-gdktarget=quartz'
+      [
+        '--with-gdktarget=quartz'
+      ]
     when :linux
     else
     end
