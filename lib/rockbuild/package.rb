@@ -83,22 +83,6 @@ module Rockbuild
       File.join(Env.build_root, "#{namever}.success")
     end
 
-
-    # This is the method that gets things going
-    def start
-      FileUtils.mkdir_p(Env.build_root) unless File.exists?(build_root)
-      FileUtils.mkdir_p(download_cache_dir) unless File.exists?(download_cache_dir)
-
-      phases = default_phases
-
-      if is_successful_build?()
-        puts "Skipping #{name} - already build"
-        phases = [:install]
-      end
-
-      phases.each { |phase| (send phase) }
-    end
-
     def is_successful_build?
       def newer_than_sources?
         mtime = File.mtime(build_success_file)
@@ -119,13 +103,6 @@ module Rockbuild
     def retrieve
       unless is_cached?
         source.retrieve(download_cache_dir)
-      end
-    end
-
-    def install
-      puts "make install"
-      Dir.chdir(extracted_dir_name) do
-        `make install`
       end
     end
 
