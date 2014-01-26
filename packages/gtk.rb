@@ -20,7 +20,8 @@ class Gtk < Package
     case Env.host
     when :mac
       [
-        '--with-gdktarget=quartz'
+        '--enable-quartz-backend',
+        '--disable-x11-backend'
       ]
     when :linux
     else
