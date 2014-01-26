@@ -1,5 +1,3 @@
-require 'open3'
-
 include Rockbuild
 
 module Rockbuild
@@ -55,15 +53,15 @@ module Rockbuild
       puts "Changing into #{package.extracted_dir}..."
       Dir.chdir(package.extracted_dir) do
         puts "make install"
-        Open3.popen3(default_env(profile), 'make install') do |i,o,e, wait_thread|
-          until o.eof?
-            puts o.gets
+        IO.popen(default_env(profile), 'make install') do |io|
+          until io.eof?
+            puts io.gets
           end
 
-          exit_status = wait_thread.value
+          io.close
 
-          if exit_status != 0
-            puts "Failed to make #{package.name}"
+          if $?.to_i != 0
+            puts "Failed to install #{package.name} (exit code #{$?.to_i})"
             exit(1)
           end
         end
