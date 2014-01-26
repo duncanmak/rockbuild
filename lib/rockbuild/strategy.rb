@@ -16,9 +16,16 @@ module Rockbuild
     def build_all(package, profile)
       ensure_dependencies(package, profile)
 
-      configure(package, profile)
-      build(package, profile)
-      install(package, profile)
+      unless package.is_successful_build?
+        configure(package, profile)
+
+        build(package, profile)
+        package.build_is_successful!
+
+        install(package, profile)
+      else
+        puts "#{package.name} is already built, skipping."
+      end
     end
 
     def prep(package, profile)

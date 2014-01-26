@@ -80,7 +80,7 @@ module Rockbuild
     end
 
     def build_success_file
-      File.join(build_root, "#{namever}.success")
+      File.join(Env.build_root, "#{namever}.success")
     end
 
 
@@ -106,6 +106,10 @@ module Rockbuild
       end
 
       File.exists?(build_success_file) && newer_than_sources?
+    end
+
+    def build_is_successful!
+      File.open(build_success_file, 'w')
     end
 
     def namever
