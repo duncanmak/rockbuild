@@ -26,6 +26,13 @@ module Rockbuild
       else
         puts "#{package.name} is already built, skipping."
       end
+
+      unless package.is_successful_install?
+        install(package, profile)
+        package.install_is_successful!
+      else
+        puts "#{package.name} is already installed, skipping."
+      end
     end
 
     def prep(package, profile)

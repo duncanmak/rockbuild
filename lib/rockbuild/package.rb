@@ -80,7 +80,7 @@ module Rockbuild
     end
 
     def build_success_file
-      File.join(Env.build_root, "#{namever}.success")
+      File.join(Env.build_root, "#{namever}.build")
     end
 
     def is_successful_build?
@@ -94,6 +94,23 @@ module Rockbuild
 
     def build_is_successful!
       File.open(build_success_file, 'w')
+    end
+
+    def install_success_file
+      File.join(Env.build_root, "#{namever}.install")
+    end
+
+    def is_successful_install?
+      def newer_than_sources?
+        mtime = File.mtime(install_success_file)
+        not (File.file?(build_success_file) && File.mtime(build_success_file) > mtime)
+      end
+
+      File.exists?(install_success_file) && newer_than_sources?
+    end
+
+    def install_is_successful!
+      File.open(install_success_file, 'w')
     end
 
     def namever
