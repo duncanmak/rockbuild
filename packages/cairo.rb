@@ -32,6 +32,12 @@ class Cairo < Package
     end
   end
 
+  def deps
+    [
+      Pixman.version('0.32.4')
+    ]
+  end
+
   def self.sources
     { '1.12.16' => Source.tar('http://cairographics.org/releases/cairo-1.12.16.tar.xz')}
   end
