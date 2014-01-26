@@ -11,7 +11,8 @@ class Gtk < Package
   def deps
     [
       Atk.version('2.10.0'),
-      Pango.version('1.36.1')
+      Pango.version('1.36.1'),
+      GdkPixbuf.version('2.30.3')
     ]
   end
 
