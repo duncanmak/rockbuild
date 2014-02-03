@@ -14,6 +14,9 @@ Dir["#{cwd}/../packages/**/*.rb"].each { |pkg| require pkg }
 # Require all the projects
 Dir["#{cwd}/../projects/**/*.rb"].each { |project| require project }
 
+Dir["./packages/**/*.rb"].each { |pkg| require pkg }
+Dir["./projects/**/*.rb"].each { |proj| require proj }
+
 $stdout.sync = true
 
 require "#{cwd}/../projects/demo_project"
@@ -24,8 +27,18 @@ class RockbuildCLI < Thor
   desc 'projects', 'list available projects'
   def projects
     projs = Rockbuild::Project.descendants
+    puts "All projects:"
     projs.each do |p|
-      puts p.to_s
+      puts "  #{p.to_s}"
+    end
+  end
+
+  desc 'packages', 'list available packages'
+  def packages
+    pkgs = Rockbuild::Package.descendants
+    puts "All packages:"
+    pkgs.each do |p|
+      puts "  #{p.to_s}"
     end
   end
 end

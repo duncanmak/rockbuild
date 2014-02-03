@@ -123,6 +123,10 @@ module Rockbuild
       end
     end
 
+    def self.descendants
+      ObjectSpace.each_object(Class).select { |k| k < self }
+    end
+
     private
 
     def merge_flags(flags_array)

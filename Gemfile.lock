@@ -1,7 +1,8 @@
 PATH
   remote: .
   specs:
-    rockbuild (0.0.1)
+    rockbuild (0.0.2)
+      thor
 
 GEM
   remote: https://rubygems.org/
