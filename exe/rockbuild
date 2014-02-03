@@ -41,6 +41,20 @@ class RockbuildCLI < Thor
       puts "  #{p.to_s}"
     end
   end
+
+  desc 'build PROJECT', 'build a project'
+  def build(name)
+    projects = Rockbuild::Project.descendants
+    project = projects.find do |p|
+      p.to_s.gsub(/Project$/, '').downcase == name.downcase || name.downcase == p.to_s.downcase
+    end
+
+    if project.nil?
+      puts "Could not find a project named '#{name}'."
+    else
+      project.new.start
+    end
+  end
 end
 
 RockbuildCLI.start(ARGV)
