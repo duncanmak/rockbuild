@@ -41,5 +41,9 @@ module Rockbuild
     def bundle
       raise 'Must implement.'
     end
+
+    def self.descendants
+      ObjectSpace.each_object(Class).select { |k| k < self }
+    end
   end
 end

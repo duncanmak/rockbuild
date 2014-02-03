@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+require 'thor'
 require 'rockbuild'
 
 cwd = File.expand_path('../', __FILE__)
@@ -17,4 +18,16 @@ $stdout.sync = true
 
 require "#{cwd}/../projects/demo_project"
 
-DemoProject.new.start
+#DemoProject.new.start
+
+class RockbuildCLI < Thor
+  desc 'projects', 'list available projects'
+  def projects
+    projs = Rockbuild::Project.descendants
+    projs.each do |p|
+      puts p.to_s
+    end
+  end
+end
+
+RockbuildCLI.start(ARGV)
