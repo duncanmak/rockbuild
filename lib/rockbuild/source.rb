@@ -8,8 +8,8 @@ module Rockbuild
         TarSource.new(url)
       end
 
-      def git(url)
-        GitSource.new(url)
+      def git(url, options = {})
+        GitSource.new(url, options)
       end
     end
 
@@ -26,6 +26,7 @@ module Rockbuild
     def filename() File.basename(url) end
 
     def retrieve(dest_dir)
+      puts "Fetching #{url} to #{dest_dir}"
       download(dest_dir)
     end
 
@@ -43,6 +44,10 @@ module Rockbuild
         puts e.message
         File.delete(destfile)
       end
+    end
+
+    def extract_dirname(name, version)
+      "#{name}-#{version}"
     end
 
     def extract(package, cached_filename, extracted_dir, overwrite: false)
