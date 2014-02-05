@@ -38,7 +38,7 @@ module Rockbuild
     end
 
     def fetch
-      deps.each do |dep|
+      deps.each do |dep, dep_strategy|
         dep.fetch
       end
 

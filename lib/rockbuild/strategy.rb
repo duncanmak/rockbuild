@@ -52,8 +52,8 @@ module Rockbuild
     end
 
     def ensure_dependencies(package, profile)
-      package.deps.each do |dep|
-        build_all(dep, profile)
+      package.deps.each do |dep, dep_strategy|
+        dep_strategy.build_all(dep, profile)
       end
     end
   end

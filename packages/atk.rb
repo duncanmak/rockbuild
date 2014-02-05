@@ -10,7 +10,7 @@ class Atk < Package
 
   def deps
     [
-      Glib.version('2.38.2')
+      [ Glib.version('2.38.2'), ConfigureMakeStrategy.new ]
     ]
   end
 

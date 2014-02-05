@@ -10,9 +10,9 @@ class Gtk < Package
 
   def deps
     [
-      Atk.version('2.10.0'),
-      Pango.version('1.36.1'),
-      GdkPixbuf.version('2.30.3')
+      [ Atk.version('2.10.0'), ConfigureMakeStrategy.new ],
+      [ Pango.version('1.36.1'), ConfigureMakeStrategy.new ],
+      [ GdkPixbuf.version('2.30.3'), ConfigureMakeStrategy.new ]
     ]
   end
 

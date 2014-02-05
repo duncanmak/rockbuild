@@ -10,8 +10,8 @@ class Glib < Package
 
   def deps
     [
-      Gettext.version('0.18.2'),
-      FFI.version('3.0.13')
+      [ Gettext.version('0.18.2'), ConfigureMakeStrategy.new ],
+      [ FFI.version('3.0.13'), ConfigureMakeStrategy.new ]
     ]
   end
 

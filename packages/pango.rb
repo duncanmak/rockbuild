@@ -16,7 +16,7 @@ class Pango < Package
 
   def deps
     [
-      Cairo.version('1.12.16')
+      [ Cairo.version('1.12.16'), ConfigureMakeStrategy.new ]
     ]
   end
 

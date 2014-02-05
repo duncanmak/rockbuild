@@ -34,7 +34,7 @@ class Cairo < Package
 
   def deps
     [
-      Pixman.version('0.32.4')
+      [ Pixman.version('0.32.4'), ConfigureMakeStrategy.new ]
     ]
   end
 
