@@ -37,7 +37,7 @@ module Rockbuild
     private
 
     def default_env
-      profile = Env.profile
+      profile = PROFILE[Env.profile]
 
       {
         'PATH'            => merge_flags(profile[:path], ':'),

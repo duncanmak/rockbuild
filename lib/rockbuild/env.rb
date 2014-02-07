@@ -7,6 +7,7 @@ module Rockbuild
 
     class << self
       def profile
+        @@profiles ||= Array.new
         @@profiles.first
       end
 
@@ -24,7 +25,7 @@ module Rockbuild
       end
 
       def build_root
-        @@build_root ||= File.join(root, 'build-root')
+        File.join(root, Env.profile.to_s, 'build-root')
       end
 
       def download_dir
