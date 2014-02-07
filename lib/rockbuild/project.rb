@@ -18,7 +18,7 @@ module Rockbuild
       puts "Project#prep"
 
       components.each do |package, profile, strategy|
-        strategy.prep(package, profile)
+        Env.with_profile(profile) { strategy.prep(package) }
       end
     end
 
@@ -26,7 +26,7 @@ module Rockbuild
       puts "Project#fetch"
 
       components.each do |package, profile, strategy|
-        package.fetch
+        Env.with_profile(profile) { package.fetch }
       end
     end
 
@@ -34,7 +34,9 @@ module Rockbuild
       puts "Project#build"
 
       components.each do |package, profile, strategy|
-        strategy.build_all(package, profile)
+        Env.with_profile(profile) do
+          strategy.build_all(package)
+        end
       end
     end
 

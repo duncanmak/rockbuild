@@ -6,6 +6,19 @@ module Rockbuild
     include Singleton
 
     class << self
+      def profile
+        @@profiles.first
+      end
+
+      def with_profile(profile)
+        @@profiles ||= Array.new
+        @@profiles.push(profile)
+
+        yield if block_given?
+
+        @@profiles.pop
+      end
+
       def root
         @@root ||= Dir.pwd
       end

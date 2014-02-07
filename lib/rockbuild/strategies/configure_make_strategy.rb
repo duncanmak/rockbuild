@@ -2,14 +2,14 @@ include Rockbuild
 
 module Rockbuild
   class ConfigureMakeStrategy < Strategy
-    def configure(package, profile)
+    def configure(package)
       puts "ConfigureMakeStrategy#configure for #{package.name}"
 
       puts "Changing into #{package.extracted_dir}..."
       Dir.chdir(package.extracted_dir) do
         puts configure_command(package)
 
-        IO.popen(default_env(profile), configure_command(package)) do |io|
+        IO.popen(default_env, configure_command(package)) do |io|
           until io.eof?
             puts io.gets
           end
@@ -24,16 +24,16 @@ module Rockbuild
       end
     end
 
-    def prep(package, profile)
+    def prep(package)
       puts "ConfigureMakeStrategy#prep for #{package.name}"
     end
 
-    def build(package, profile)
+    def build(package)
       puts "ConfigureMakeStrategy#build for #{package.name}"
       puts "Changing into #{package.extracted_dir}..."
       Dir.chdir(package.extracted_dir) do
         puts "make -j"
-        IO.popen(default_env(profile), 'make') do |io|
+        IO.popen(default_env, 'make') do |io|
           until io.eof?
             puts io.gets
           end
@@ -48,12 +48,12 @@ module Rockbuild
       end
     end
 
-    def install(package, profile)
+    def install(package)
       puts "ConfigureMakeStrategy#install for #{package.name}"
       puts "Changing into #{package.extracted_dir}..."
       Dir.chdir(package.extracted_dir) do
         puts "make install"
-        IO.popen(default_env(profile), 'make install') do |io|
+        IO.popen(default_env, 'make install') do |io|
           until io.eof?
             puts io.gets
           end
