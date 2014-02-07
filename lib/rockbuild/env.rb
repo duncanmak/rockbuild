@@ -25,7 +25,7 @@ module Rockbuild
       end
 
       def build_root
-        File.join(root, Env.profile.to_s, 'build-root')
+        File.join(root, 'build-root', Env.profile.to_s)
       end
 
       def download_dir
