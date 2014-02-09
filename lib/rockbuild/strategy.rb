@@ -22,6 +22,10 @@ module Rockbuild
       end
     end
 
+    def fetch(package)
+      package.fetch
+    end
+
     def prep(package)
       raise "Strategy must implement 'prep'."
     end
@@ -36,8 +40,18 @@ module Rockbuild
 
     private
 
+    def profile(name)
+      prefix = File.join(Env.root, 'build-root', name.to_s, '_install')
+
+      {
+        cflags:  [ "-I#{prefix}/include" ],
+        ldflags: [ "-L#{prefix}/lib" ],
+        path:    [ ENV['PATH'], "#{prefix}/bin", '/usr/bin', '/bin' ]
+      }
+    end
+
     def default_env
-      profile = PROFILE[Env.profile]
+      profile = profile(Env.profile)
 
       {
         'PATH'            => merge_flags(profile[:path], ':'),

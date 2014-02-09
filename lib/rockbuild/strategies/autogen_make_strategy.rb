@@ -6,8 +6,8 @@ module Rockbuild
   class AutogenMakeStrategy < ConfigureMakeStrategy
     private
 
-    def configure_command(package)
-      "./autogen.sh --prefix=#{Env.prefix} #{merge_flags(package.configure_flags)}"
+    def configure_command(package, prefix)
+      "./autogen.sh --prefix=#{prefix} #{merge_flags(package.configure_flags)}"
     end
   end
 end

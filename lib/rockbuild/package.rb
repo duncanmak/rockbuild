@@ -68,7 +68,11 @@ module Rockbuild
     end
 
     def extracted_dir
-      File.join(Env.build_root, @source.extract_dirname(name, version))
+      File.join(Env.build_root, extracted_basename)
+    end
+
+    def extracted_basename
+      @source.extract_dirname(name, version)
     end
 
     def cached_filename

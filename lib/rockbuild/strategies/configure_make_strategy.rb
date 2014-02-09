@@ -2,24 +2,30 @@ include Rockbuild
 
 module Rockbuild
   class ConfigureMakeStrategy < Strategy
-    def configure(package)
+    def configure(package, prefix = nil)
       puts "ConfigureMakeStrategy#configure for #{package.name}"
-
       puts "Changing into #{package.extracted_dir}..."
+
       Dir.chdir(package.extracted_dir) do
-        puts configure_command(package)
+        do_configure(package, prefix)
+      end
+    end
 
-        IO.popen(default_env, configure_command(package)) do |io|
-          until io.eof?
-            puts io.gets
-          end
+    def do_configure(package, prefix = nil)
+      puts configure_command(package, prefix || Env.prefix)
 
-          io.close
+      IO.popen(default_env, configure_command(package, prefix || Env.prefix)) do |io|
+        until io.eof?
+          io.gets
+        end
 
-          if $?.to_i != 0
-            puts "Failed to configure #{package.name}"
-            exit(1)
-          end
+        io.close
+
+        if $?.to_i != 0
+          puts "Failed to configure #{package.name}"
+          puts "ENVIRONMENT:"
+          puts default_env.inspect
+          exit(1)
         end
       end
     end
@@ -32,16 +38,18 @@ module Rockbuild
       puts "ConfigureMakeStrategy#build for #{package.name}"
       puts "Changing into #{package.extracted_dir}..."
       Dir.chdir(package.extracted_dir) do
-        puts "make -j"
-        IO.popen(default_env, 'make') do |io|
+        puts "make -j 8"
+        IO.popen(default_env, 'make -j 8') do |io|
           until io.eof?
-            puts io.gets
+            io.gets
           end
 
           io.close
 
           if $?.to_i != 0
             puts "Failed to build #{package.name} (exit code #{$?.to_i})"
+            puts "ENVIRONMENT:"
+            puts default_env.inspect
             exit(1)
           end
         end
@@ -55,7 +63,7 @@ module Rockbuild
         puts "make install"
         IO.popen(default_env, 'make install') do |io|
           until io.eof?
-            puts io.gets
+            io.gets
           end
 
           io.close
@@ -70,8 +78,8 @@ module Rockbuild
 
     private
 
-    def configure_command(package)
-      "./configure --prefix=#{Env.prefix} #{merge_flags(package.configure_flags)}"
+    def configure_command(package, prefix)
+      "./configure --prefix=#{prefix} #{merge_flags(package.configure_flags)}"
     end
   end
 end

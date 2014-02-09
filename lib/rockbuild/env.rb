@@ -8,7 +8,7 @@ module Rockbuild
     class << self
       def profile
         @@profiles ||= Array.new
-        @@profiles.first
+        @@profiles.last
       end
 
       def with_profile(profile)
@@ -33,7 +33,11 @@ module Rockbuild
       end
 
       def prefix
-        @@prefix ||= File.join(build_root, '_install')
+        File.join(build_root, '_install')
+      end
+
+      def tmpdir
+        File.join(build_root, 'build-root', '_tmp')
       end
 
       def host

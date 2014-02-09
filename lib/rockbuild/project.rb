@@ -1,7 +1,7 @@
 module Rockbuild
   class Project
     def entry(package, profile, strategy)
-      [ package, profile, strategy.new ]
+      [ package, profile, strategy.is_a?(Class) ? strategy.new : strategy ]
     end
 
     # This should be overridden
@@ -26,7 +26,7 @@ module Rockbuild
       puts "Project#fetch"
 
       components.each do |package, profile, strategy|
-        Env.with_profile(profile) { package.fetch }
+        Env.with_profile(profile) { strategy.fetch(package) }
       end
     end
 
