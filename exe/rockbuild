@@ -24,6 +24,23 @@ require "#{cwd}/../projects/demo_project"
 #DemoProject.new.start
 
 class RockbuildCLI < Thor
+
+  def self.dry_run!(value)
+    @@dry_run = value
+  end
+
+  def self.dry_run?
+    @@dry_run
+  end
+
+  def self.quiet!(value)
+    @@quiet = value
+  end
+
+  def self.quiet?
+    @@quiet
+  end
+
   desc 'projects', 'list available projects'
   def projects
     projs = Rockbuild::Project.descendants
@@ -42,12 +59,18 @@ class RockbuildCLI < Thor
     end
   end
 
+  method_option :dry_run, :type => :boolean, :default => false, :aliases => "-n", :desc => "Dry run"
+  method_option :quiet, :type => :boolean, :default => false, :aliases => "-q", :desc => "Quiet"
   desc 'build PROJECT', 'build a project'
   def build(name)
     projects = Rockbuild::Project.descendants
     project = projects.find do |p|
       p.to_s.gsub(/Project$/, '').downcase == name.downcase || name.downcase == p.to_s.downcase
     end
+
+    puts "Dry run" if (options[:dry_run])
+    RockbuildCLI.dry_run!(options[:dry_run])
+    RockbuildCLI.quiet!(options[:quiet])
 
     if project.nil?
       puts "Could not find a project named '#{name}'."

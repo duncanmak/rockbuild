@@ -2,6 +2,8 @@ include Rockbuild
 
 module Rockbuild
   class ConfigureMakeStrategy < Strategy
+    include Commands
+
     def configure(package, prefix = nil)
       puts "ConfigureMakeStrategy#configure for #{package.name}"
       puts "Changing into #{package.extracted_dir}..."
@@ -38,21 +40,7 @@ module Rockbuild
       puts "ConfigureMakeStrategy#build for #{package.name}"
       puts "Changing into #{package.extracted_dir}..."
       Dir.chdir(package.extracted_dir) do
-        puts "make -j 8"
-        IO.popen(default_env, 'make -j 8') do |io|
-          until io.eof?
-            io.gets
-          end
-
-          io.close
-
-          if $?.to_i != 0
-            puts "Failed to build #{package.name} (exit code #{$?.to_i})"
-            puts "ENVIRONMENT:"
-            puts default_env.inspect
-            exit(1)
-          end
-        end
+        make "-j 8"
       end
     end
 
@@ -60,26 +48,14 @@ module Rockbuild
       puts "ConfigureMakeStrategy#install for #{package.name}"
       puts "Changing into #{package.extracted_dir}..."
       Dir.chdir(package.extracted_dir) do
-        puts "make install"
-        IO.popen(default_env, 'make install') do |io|
-          until io.eof?
-            io.gets
-          end
-
-          io.close
-
-          if $?.to_i != 0
-            puts "Failed to install #{package.name} (exit code #{$?.to_i})"
-            exit(1)
-          end
-        end
+        make "install"
       end
     end
 
     private
 
     def configure_command(package, prefix)
-      "./configure --prefix=#{prefix} #{merge_flags(package.configure_flags)}"
+      configure "--prefix=#{prefix}", merge_flags(package.configure_flags)
     end
   end
 end

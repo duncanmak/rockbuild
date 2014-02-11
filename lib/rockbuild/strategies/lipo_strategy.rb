@@ -35,8 +35,7 @@ module Rockbuild
         puts "Processing #{bin}..."
         bin32 = File.join(Env.root, 'build-root', 'mac32', '_install', bin)
         bin64 = File.join(Env.root, 'build-root', 'mac64', '_install', bin)
-        puts "/usr/bin/lipo -create #{bin32} #{bin64} -output #{bin64}"
-        `/usr/bin/lipo -create #{bin32} #{bin64} -output #{bin64}`
+        lipo "-create", bin32, bin64, "-output", bin64
       end
     end
 
