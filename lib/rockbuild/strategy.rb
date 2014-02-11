@@ -4,7 +4,7 @@ module Rockbuild
       ensure_dependencies(package)
 
       unless package.is_successful_build?
-        configure(package)
+        setup(package)
 
         build(package)
         package.build_is_successful!
@@ -28,6 +28,10 @@ module Rockbuild
 
     def prep(package)
       raise "Strategy must implement 'prep'."
+    end
+
+    def setup(package)
+      raise "Strategy must implement 'setup'."
     end
 
     def build(package)

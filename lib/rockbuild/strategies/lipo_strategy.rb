@@ -16,7 +16,6 @@ module Rockbuild
     end
 
     def build_all(package)
-      tempdir = File.join(Env.tmpdir, package.extracted_basename)
       bins = []
 
       [:mac32, :mac64].each do |profile|

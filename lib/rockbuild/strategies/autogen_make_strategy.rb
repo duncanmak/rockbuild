@@ -4,10 +4,11 @@ include Rockbuild
 
 module Rockbuild
   class AutogenMakeStrategy < ConfigureMakeStrategy
+    include Commands
     private
 
-    def configure_command(package, prefix)
-      "./autogen.sh --prefix=#{prefix} #{merge_flags(package.configure_flags)}"
+    def configure_command
+      autogen_sh
     end
   end
 end
