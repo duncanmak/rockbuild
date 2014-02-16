@@ -9,7 +9,6 @@ module Rockbuild
       puts "Changing into #{package.extracted_dir}..."
 
       Dir.chdir(package.extracted_dir) do
-        configure = configure_command
         configure "--prefix=#{prefix || Env.prefix}", merge_flags(package.configure_flags)
       end
     end
@@ -32,12 +31,6 @@ module Rockbuild
       Dir.chdir(package.extracted_dir) do
         make "install"
       end
-    end
-
-
-    private
-    def configure_command
-      configure
     end
   end
 end
