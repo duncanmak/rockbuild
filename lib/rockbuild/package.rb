@@ -25,7 +25,14 @@ module Rockbuild
     end
 
     def patches
-      []
+      [] unless self.class.respond_to?(:patches)
+
+      hash = self.class.patches
+      unless hash.nil?
+        hash[version] || []
+      else
+        []
+      end
     end
 
     def configure_flags
@@ -59,6 +66,8 @@ module Rockbuild
         Dir.chdir(Env.build_root) do
           extract_from = "#{Env.download_dir}/#{source.filename}"
           source.extract(self, extract_from, extracted_dir)
+
+          apply_patches
         end
       end
     end
@@ -132,6 +141,14 @@ module Rockbuild
     end
 
     private
+
+    def apply_patches
+      Dir.chdir(extracted_dir) do
+        patches.each do |patch|
+          patch.apply
+        end
+      end
+    end
 
     def merge_flags(flags_array)
       flags_array.join(' ')

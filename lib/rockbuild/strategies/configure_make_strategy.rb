@@ -2,8 +2,6 @@ include Rockbuild
 
 module Rockbuild
   class ConfigureMakeStrategy < Strategy
-    include Commands
-
     def setup(package, prefix = nil)
       puts "ConfigureMakeStrategy#configure for #{package.name}"
       puts "Changing into #{package.extracted_dir}..."

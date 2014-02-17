@@ -16,7 +16,38 @@ module Rockbuild
       _run("lipo", args)
     end
 
+    def patch(*args)
+      _run('patch', args)
+    end
+
     private
+
+    def profile(name)
+      prefix = File.join(Env.root, 'build-root', name.to_s, '_install')
+
+      {
+        cflags:  [ "-I#{prefix}/include" ],
+        ldflags: [ "-L#{prefix}/lib" ],
+        path:    [ ENV['PATH'], "#{prefix}/bin", '/usr/bin', '/bin' ]
+      }
+    end
+
+    def default_env
+      profile = profile(Env.profile)
+
+      {
+        'PATH'            => merge_flags(profile[:path], ':'),
+        'CFLAGS'          => merge_flags(profile[:cflags]),
+        'CPPFLAGS'        => merge_flags(profile[:cflags]),
+        'CXXFLAGS'        => merge_flags(profile[:cflags]),
+        'LDFLAGS'         => merge_flags(profile[:ldflags]),
+        'PKG_CONFIG_PATH' => "#{Env.prefix}/lib/pkgconfig"
+      }
+    end
+
+    def merge_flags(flags_array, separator = ' ')
+      flags_array.join(separator)
+    end
 
     def _run(cmd, args)
       if RockbuildCLI.dry_run?

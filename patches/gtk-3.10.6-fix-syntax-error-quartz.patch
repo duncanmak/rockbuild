@@ -1,0 +1,14 @@
+diff --git a/gdk/quartz/gdkevents-quartz.c b/gdk/quartz/gdkevents-quartz.c
+index 39a214b..777861a 100644
+--- a/gdk/quartz/gdkevents-quartz.c
++++ b/gdk/quartz/gdkevents-quartz.c
+@@ -1680,7 +1680,8 @@ _gdk_quartz_screen_get_setting (GdkScreen   *screen,
+       g_value_set_boolean (value, TRUE);
+ 
+       GDK_QUARTZ_RELEASE_POOL;
+-  
++    }
++
+   /* FIXME: Add more settings */
+ 
+   return FALSE;

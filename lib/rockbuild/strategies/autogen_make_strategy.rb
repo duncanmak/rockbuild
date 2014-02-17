@@ -4,7 +4,6 @@ include Rockbuild
 
 module Rockbuild
   class AutogenMakeStrategy < ConfigureMakeStrategy
-    include Commands
     private
 
     def configure_command

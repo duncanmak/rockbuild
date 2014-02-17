@@ -1,5 +1,7 @@
 module Rockbuild
   class Strategy
+    include Commands
+
     def build_all(package)
       ensure_dependencies(package)
 
@@ -43,33 +45,6 @@ module Rockbuild
     end
 
     private
-
-    def profile(name)
-      prefix = File.join(Env.root, 'build-root', name.to_s, '_install')
-
-      {
-        cflags:  [ "-I#{prefix}/include" ],
-        ldflags: [ "-L#{prefix}/lib" ],
-        path:    [ ENV['PATH'], "#{prefix}/bin", '/usr/bin', '/bin' ]
-      }
-    end
-
-    def default_env
-      profile = profile(Env.profile)
-
-      {
-        'PATH'            => merge_flags(profile[:path], ':'),
-        'CFLAGS'          => merge_flags(profile[:cflags]),
-        'CPPFLAGS'        => merge_flags(profile[:cflags]),
-        'CXXFLAGS'        => merge_flags(profile[:cflags]),
-        'LDFLAGS'         => merge_flags(profile[:ldflags]),
-        'PKG_CONFIG_PATH' => "#{Env.prefix}/lib/pkgconfig"
-      }
-    end
-
-    def merge_flags(flags_array, separator = ' ')
-      flags_array.join(separator)
-    end
 
     def ensure_dependencies(package)
       package.deps.each do |dep, dep_strategy|

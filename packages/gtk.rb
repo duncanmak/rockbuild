@@ -31,4 +31,8 @@ class Gtk < Package
   def self.sources
     { '3.10.6' => Source.tar('http://ftp.gnome.org/pub/gnome/sources/gtk+/3.10/gtk+-3.10.6.tar.xz') }
   end
+
+  def self.patches
+    { '3.10.6' => [ Patch.new('gtk-3.10.6-fix-syntax-error-quartz.patch', 1) ] }
+  end
 end
