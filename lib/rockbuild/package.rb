@@ -25,7 +25,7 @@ module Rockbuild
     end
 
     def patches
-      [] unless self.class.respond_to?(:patches)
+      return [] unless self.class.respond_to?(:patches)
 
       hash = self.class.patches
       unless hash.nil?
