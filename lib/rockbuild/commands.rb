@@ -50,7 +50,7 @@ module Rockbuild
     end
 
     def _run(cmd, args)
-      if RockbuildCLI.dry_run?
+      if Env.dry_run?
         dry_run(cmd, args)
       else
         really_run(cmd, args)
@@ -69,7 +69,7 @@ module Rockbuild
       IO.popen(default_env, command) do |io|
         until io.eof?
           output = io.gets
-          puts output unless RockbuildCLI.quiet?
+          puts output unless Env.quiet?
         end
         io.close
         raise "#{command} failed" if ($?.to_i != 0)

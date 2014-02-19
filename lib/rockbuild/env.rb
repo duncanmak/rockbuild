@@ -57,6 +57,23 @@ module Rockbuild
           end
         )
       end
+
+      def dry_run!(value)
+        @@dry_run = value
+      end
+
+      def dry_run?
+        @@dry_run
+      end
+
+      def quiet!(value)
+        @@quiet = value
+      end
+
+      def quiet?
+        @@quiet
+      end
+
     end
   end
 end

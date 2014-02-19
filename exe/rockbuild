@@ -25,21 +25,6 @@ require "#{cwd}/../projects/demo_project"
 
 class RockbuildCLI < Thor
 
-  def self.dry_run!(value)
-    @@dry_run = value
-  end
-
-  def self.dry_run?
-    @@dry_run
-  end
-
-  def self.quiet!(value)
-    @@quiet = value
-  end
-
-  def self.quiet?
-    @@quiet
-  end
 
   desc 'projects', 'list available projects'
   def projects
@@ -69,8 +54,8 @@ class RockbuildCLI < Thor
     end
 
     puts "Dry run" if (options[:dry_run])
-    RockbuildCLI.dry_run!(options[:dry_run])
-    RockbuildCLI.quiet!(options[:quiet])
+    Env.dry_run!(options[:dry_run])
+    Env.quiet!(options[:quiet])
 
     if project.nil?
       puts "Could not find a project named '#{name}'."
