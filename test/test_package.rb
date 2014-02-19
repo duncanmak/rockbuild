@@ -5,8 +5,7 @@ include Rockbuild
 
 class TestPackage < Minitest::Test
   def setup
-    profile = DemoProfile.new
-    @package = Package.new(profile)
+    @package = Package.new("1.0", nil)
   end
 
   def test_has_empty_patches
