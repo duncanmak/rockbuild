@@ -7,20 +7,22 @@ class GitSource < Source
     @revision = options.delete(:revision)
   end
 
+  def git(*args)
+    _run('git', args)
+  end
+
   def download(destdir)
     puts "download(destdir=#{destdir})"
     dest = File.join(destdir, @url.split(/\//).last.gsub(/\.git/, ''))
     if File.exists?(dest)
       puts 'Updating existing cache.'
       chdir(dest) do
-        puts "git fetch --all --prune"
-        `git fetch --all --prune`
+        git 'fetch --all --prune'
       end
     else
       puts 'No cache detected. Cloning a fresh one.'
       chdir(destdir) do
-        puts "git clone --mirror #{@url}"
-        `git clone --mirror #{@url}`
+        git 'clone --mirror #{@url}'
       end
     end
   end
@@ -35,13 +37,13 @@ class GitSource < Source
     dest = @url.split(/\//).last.gsub(/\.git/, '')
     if !File.exists?(dest)
       puts "No workspace checkout detected. Cloning a fresh workspace checkout from the cache."
-      `git clone --local --shared #{cached_filename}`
+      git 'clone --local --shared #{cached_filename}'
     else
       puts "Updating existing workspace checkout."
       chdir(dest) do
-        `git clean -xffd`
-        `git reset --hard`
-        `git fetch --all --prune`
+        git 'clean -xffd'
+        git 'reset --hard'
+        git 'fetch --all --prune'
       end
     end
   end
