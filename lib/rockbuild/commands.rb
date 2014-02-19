@@ -20,6 +20,16 @@ module Rockbuild
       _run('patch', args)
     end
 
+    def chdir(dir,&block)
+      dry_run("cd", [dir])
+
+      if Env.dry_run?
+        block.call
+      else
+        Dir.chdir(dir) { block.call }
+      end
+    end
+
     private
 
     def profile(name)

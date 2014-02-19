@@ -25,7 +25,7 @@ module Rockbuild
       end
 
       Env.with_profile(:mac64) do
-        Dir.chdir(Env.prefix) do
+        chdir(Env.prefix) do
           bins += `find . -type f | xargs file | sed -e \"s,^.,,g\" | grep -E \"(Mach-O)\|\(ar\ archive\)\" | sed -e 's,:.*,,g' -e '/\for\ architecture/d'`.split("\n")
         end
       end
