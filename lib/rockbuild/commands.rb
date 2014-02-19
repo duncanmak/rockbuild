@@ -40,6 +40,11 @@ module Rockbuild
       File.delete (file) unless Env.dry_run?
     end
 
+    def touch(file)
+      dry_run("touch", [file])
+      File.open(build_success_file, 'w') unless Env.dry_run?
+    end
+
     def download_file(file, url)
       dry_run("download", [file, url])
       if Env.dry_run?

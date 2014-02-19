@@ -108,7 +108,7 @@ module Rockbuild
     end
 
     def build_is_successful!
-      File.open(build_success_file, 'w')
+      touch build_success_file
     end
 
     def install_success_file
@@ -125,7 +125,7 @@ module Rockbuild
     end
 
     def install_is_successful!
-      File.open(install_success_file, 'w')
+      touch install_success_file
     end
 
     def namever
