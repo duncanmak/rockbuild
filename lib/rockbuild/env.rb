@@ -23,6 +23,7 @@ module Rockbuild
       end
 
       def with_settings(_settings, &block)
+        _settings = Hash[_settings.map{|(k,v)| [k.to_sym,v]}]
         old_settings = settings
         @@settings = old_settings.merge _settings
 
