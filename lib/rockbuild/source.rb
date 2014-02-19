@@ -37,14 +37,12 @@ module Rockbuild
       begin
         destfile = File.join(destdir, filename)
 
-        FileUtils.mkdir_p(destdir) unless File.exists?(destdir)
+        mkdir_p(destdir) unless File.exists?(destdir)
 
-        File.open(destfile, "wb") do |output|
-          open(url) { |input| output.write(input.read) }
-        end
+        download_file(destfile, url)
       rescue Exception => e
         puts e.message
-        File.delete(destfile)
+        delete(destfile)
       end
     end
 

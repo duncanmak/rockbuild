@@ -30,6 +30,25 @@ module Rockbuild
       end
     end
 
+    def mkdir_p(dir)
+      dry_run("mkdir_p", [dir])
+      FileUtils.mkdir_p (dir) unless Env.dry_run?
+    end
+
+    def delete(file)
+      dry_run("delete", [file])
+      File.delete (file) unless Env.dry_run?
+    end
+
+    def download_file(file, url)
+      dry_run("download", [file, url])
+      if Env.dry_run?
+        File.open(destfile, "wb") do |output|
+          open(url) { |input| output.write(input.read) }
+        end
+      end
+    end
+
     private
 
     def profile(name)

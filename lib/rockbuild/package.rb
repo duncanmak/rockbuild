@@ -63,7 +63,7 @@ module Rockbuild
       else
         puts "Extracting #{name} to #{Env.build_root}..."
 
-        FileUtils.mkdir_p(Env.build_root) unless File.exists?(Env.build_root)
+        mkdir_p(Env.build_root) unless File.exists?(Env.build_root)
 
         chdir(Env.build_root) do
           extract_from = "#{Env.download_dir}/#{source.filename}"
