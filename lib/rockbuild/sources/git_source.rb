@@ -12,13 +12,13 @@ class GitSource < Source
     dest = File.join(destdir, @url.split(/\//).last.gsub(/\.git/, ''))
     if File.exists?(dest)
       puts 'Updating existing cache.'
-      Dir.chdir(dest) do
+      chdir(dest) do
         puts "git fetch --all --prune"
         `git fetch --all --prune`
       end
     else
       puts 'No cache detected. Cloning a fresh one.'
-      Dir.chdir(destdir) do
+      chdir(destdir) do
         puts "git clone --mirror #{@url}"
         `git clone --mirror #{@url}`
       end
@@ -38,7 +38,7 @@ class GitSource < Source
       `git clone --local --shared #{cached_filename}`
     else
       puts "Updating existing workspace checkout."
-      Dir.chdir(dest) do
+      chdir(dest) do
         `git clean -xffd`
         `git reset --hard`
         `git fetch --all --prune`

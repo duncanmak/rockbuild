@@ -7,6 +7,8 @@ module Rockbuild
     attr_reader :version
     attr_reader :source
 
+    include Commands
+
     def initialize(ver, src)
       @version = ver
       @source = src
@@ -63,7 +65,7 @@ module Rockbuild
 
         FileUtils.mkdir_p(Env.build_root) unless File.exists?(Env.build_root)
 
-        Dir.chdir(Env.build_root) do
+        chdir(Env.build_root) do
           extract_from = "#{Env.download_dir}/#{source.filename}"
           source.extract(self, extract_from, extracted_dir)
 
@@ -143,7 +145,7 @@ module Rockbuild
     private
 
     def apply_patches
-      Dir.chdir(extracted_dir) do
+      chdir(extracted_dir) do
         patches.each do |patch|
           patch.apply
         end

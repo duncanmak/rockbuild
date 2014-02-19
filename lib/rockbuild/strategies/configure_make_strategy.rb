@@ -6,7 +6,7 @@ module Rockbuild
       puts "ConfigureMakeStrategy#configure for #{package.name}"
       puts "Changing into #{package.extracted_dir}..."
 
-      Dir.chdir(package.extracted_dir) do
+      chdir(package.extracted_dir) do
         configure "--prefix=#{prefix || Env.prefix}", merge_flags(package.configure_flags)
       end
     end
@@ -18,7 +18,7 @@ module Rockbuild
     def build(package)
       puts "ConfigureMakeStrategy#build for #{package.name}"
       puts "Changing into #{package.extracted_dir}..."
-      Dir.chdir(package.extracted_dir) do
+      chdir(package.extracted_dir) do
         make "-j 8"
       end
     end
@@ -26,7 +26,7 @@ module Rockbuild
     def install(package)
       puts "ConfigureMakeStrategy#install for #{package.name}"
       puts "Changing into #{package.extracted_dir}..."
-      Dir.chdir(package.extracted_dir) do
+      chdir(package.extracted_dir) do
         make "install"
       end
     end

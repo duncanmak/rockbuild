@@ -3,6 +3,8 @@ require 'open-uri'
 
 module Rockbuild
   class Source
+    include Commands
+
     class << self
       def tar(url)
         TarSource.new(url)
