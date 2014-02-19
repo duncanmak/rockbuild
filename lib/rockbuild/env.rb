@@ -6,22 +6,35 @@ module Rockbuild
     include Singleton
 
     class << self
-      def profile
-        @@profiles ||= Array.new
-        @@profiles.last
+      def default_settings
+        { root: Dir.pwd }
       end
 
-      def with_profile(profile)
-        @@profiles ||= Array.new
-        @@profiles.push(profile)
+      def settings
+        @@settings ||= default_settings
+      end
 
-        yield if block_given?
+      def profile
+        settings[:profile]
+      end
 
-        @@profiles.pop
+      def with_profile(profile, &block)
+        with_settings({ profile: profile }) { block.call }
+      end
+
+      def with_settings(_settings, &block)
+        old_settings = settings
+        @@settings = old_settings.merge _settings
+
+        begin
+          block.call
+        ensure
+          @@settings = old_settings
+        end
       end
 
       def root
-        @@root ||= Dir.pwd
+        settings[:root]
       end
 
       def build_root
@@ -29,7 +42,7 @@ module Rockbuild
       end
 
       def download_dir
-        @@download_dir ||= File.join(root, 'cache')
+        File.join(root, 'cache')
       end
 
       def prefix
@@ -58,22 +71,13 @@ module Rockbuild
         )
       end
 
-      def dry_run!(value)
-        @@dry_run = value
-      end
-
       def dry_run?
-        @@dry_run
-      end
-
-      def quiet!(value)
-        @@quiet = value
+        settings[:dry_run]
       end
 
       def quiet?
-        @@quiet
+        settings[:quiet]
       end
-
     end
   end
 end

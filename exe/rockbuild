@@ -54,13 +54,11 @@ class RockbuildCLI < Thor
     end
 
     puts "Dry run" if (options[:dry_run])
-    Env.dry_run!(options[:dry_run])
-    Env.quiet!(options[:quiet])
 
     if project.nil?
       puts "Could not find a project named '#{name}'."
     else
-      project.new.start
+      Env.with_settings(options) { project.new.start }
     end
   end
 end
