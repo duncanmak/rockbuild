@@ -94,7 +94,7 @@ module Rockbuild
     def dry_run(cmd, args)
       command = "\"#{cmd}\" #{args * ' '}"
       now = Time.new.strftime("%H:%M:%S")
-      puts "#{now} - Running #{command} in #{Dir.pwd}"
+      puts "#{now} - Running #{command} in #{Dir.pwd}" unless Env.quiet?
     end
 
     def really_run(cmd, args)
