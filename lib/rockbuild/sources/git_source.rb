@@ -22,7 +22,7 @@ class GitSource < Source
     else
       puts 'No cache detected. Cloning a fresh one.'
       chdir(destdir) do
-        git 'clone --mirror #{@url}'
+        git "clone", "--mirror", @url
       end
     end
   end
@@ -37,7 +37,7 @@ class GitSource < Source
     dest = @url.split(/\//).last.gsub(/\.git/, '')
     if !File.exists?(dest)
       puts "No workspace checkout detected. Cloning a fresh workspace checkout from the cache."
-      git 'clone --local --shared #{cached_filename}'
+      git "clone --local --shared #{cached_filename}"
     else
       puts "Updating existing workspace checkout."
       chdir(dest) do

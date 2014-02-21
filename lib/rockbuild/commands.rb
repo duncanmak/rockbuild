@@ -47,8 +47,8 @@ module Rockbuild
 
     def download_file(file, url)
       dry_run("download", [file, url])
-      if Env.dry_run?
-        File.open(destfile, "wb") do |output|
+      unless Env.dry_run?
+        File.open(file, "wb") do |output|
           open(url) { |input| output.write(input.read) }
         end
       end
