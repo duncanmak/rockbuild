@@ -11,7 +11,7 @@ class GitSource < Source
     _run('git', args)
   end
 
-  def download(destdir)
+  def retrieve(destdir)
     puts "download(destdir=#{destdir})"
     dest = File.join(destdir, @url.split(/\//).last.gsub(/\.git/, ''))
     if File.exists?(dest)

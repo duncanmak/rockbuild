@@ -28,22 +28,8 @@ module Rockbuild
     def filename() File.basename(url) end
 
     def retrieve(dest_dir)
-      puts "Fetching #{url} to #{dest_dir}"
-      download(dest_dir)
-    end
-
-    def download(destdir)
-      puts "Downloading #{url} to #{destdir}"
-      begin
-        destfile = File.join(destdir, filename)
-
-        mkdir_p(destdir) unless File.exists?(destdir)
-
-        download_file(destfile, url)
-      rescue Exception => e
-        puts e.message
-        delete(destfile)
-      end
+      puts "Retrieving #{url} to #{dest_dir}"
+      raise "subclass responsibility"
     end
 
     def extract_dirname(name, version)
