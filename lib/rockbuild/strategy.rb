@@ -48,7 +48,8 @@ module Rockbuild
 
     def ensure_dependencies(package)
       package.deps.each do |dep, dep_strategy|
-        dep_strategy.build_all(dep)
+        strat = dep_strategy.is_a?(Class) ? dep_strategy.new : dep_strategy
+        strat.build_all(dep)
       end
     end
   end
