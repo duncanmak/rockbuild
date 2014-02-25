@@ -14,8 +14,8 @@ class Llvm < Package
   end
 
   def configure_flags
-    case Env.host
-    when :mac
+    case Env.host.to_s
+    when /mac/
       base = [
         '--enable-optimized',
         '--enable-targets="x86 x86_64"'
@@ -26,8 +26,10 @@ class Llvm < Package
       elsif Env.profile == :mac64
         target = [ '--build=x86_64-apple-darwin13.0.0' ]
       end
-    when :linux
+    when /linux/
+      []
     else
+      []
     end
   end
 

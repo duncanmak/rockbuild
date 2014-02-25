@@ -56,12 +56,22 @@ module Rockbuild
 
       def host
         @@host ||= (
+          packsize = ['a'].pack('p').size
+          bits = case packsize
+          when 8
+            64
+          when 4
+            32
+          else
+            raise "Failed to detect if this is a 32-bit or 64-bit host."
+          end
+
           host_os = RbConfig::CONFIG['host_os']
           case host_os
           when /darwin|mac os/
-            :mac
+            "mac#{bits}".to_sym
           when /linux/
-            :linux
+            "linux#{bits}".to_sym
           when /solaris|bsd/
             :unix
           when /mswin|msys|mingw|cygwin|bccwin|wince|wmc/

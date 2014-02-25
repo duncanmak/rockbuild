@@ -17,14 +17,16 @@ class Gtk < Package
   end
 
   def configure_flags
-    case Env.host
-    when :mac
+    case Env.host.to_s
+    when /mac/
       [
         '--enable-quartz-backend',
         '--disable-x11-backend'
       ]
-    when :linux
+    when /linux/
+      []
     else
+      []
     end
   end
 

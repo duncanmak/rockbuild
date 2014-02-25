@@ -1,7 +1,7 @@
 module Rockbuild
   class Project
-    def entry(package, profile, strategy)
-      [ package, profile, strategy.is_a?(Class) ? strategy.new : strategy ]
+    def entry(package, strategy)
+      [ package, Env.host, strategy.is_a?(Class) ? strategy.new : strategy ]
     end
 
     # This should be overridden
