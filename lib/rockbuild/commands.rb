@@ -68,15 +68,22 @@ module Rockbuild
 
     def default_env
       profile = profile(Env.profile)
+      library_path = if Env.host =~ /linux/
+        { 'LD_LIBRARY_PATH' => "#{Env.prefix}/lib" }
+      elsif Env.host =~ /mac/
+        { 'DYLD_LIBRARY_PATH' => "#{Env.prefix}/lib" }
+      else
+        {}
+      end
 
-      {
+      library_path.merge({
         'PATH'            => merge_flags(profile[:path], ':'),
         'CFLAGS'          => merge_flags(profile[:cflags]),
         'CPPFLAGS'        => merge_flags(profile[:cflags]),
         'CXXFLAGS'        => merge_flags(profile[:cflags]),
         'LDFLAGS'         => merge_flags(profile[:ldflags]),
         'PKG_CONFIG_PATH' => "#{Env.prefix}/lib/pkgconfig"
-      }
+      })
     end
 
     def merge_flags(flags_array, separator = ' ')
